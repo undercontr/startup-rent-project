@@ -4,15 +4,12 @@ import { jsonResult } from "../resultType";
 export default async function handleGetResponse(client, req, res) {
   const models = getModelNames(client);
 
-  const [entityRegular, id, ...rest] = req.query.prisma;
+  const [entityRegular, id] = req.query.prisma;
   const entity = entityRegular.toLowerCase();
 
-  const { method, body } = req;
-
   if (id) {
-    return jsonResult(
-      res,
-      await client[entity].findUnique({ where: { id: Number(id) } })
+    return jsonResult(res, () =>
+      client[entity].findUnique({ where: { id: Number(id) } })
     );
   } else {
     if (!models.isPlural(entity)) {
@@ -25,9 +22,8 @@ export default async function handleGetResponse(client, req, res) {
           "/1"
       );
     } else {
-      return jsonResult(
-        res,
-        await client[models.searchInPlural(entity).lower].findMany()
+      return jsonResult(res, () =>
+        client[models.searchInPlural(entity).lower].findMany()
       );
     }
   }

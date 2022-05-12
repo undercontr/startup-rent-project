@@ -11,7 +11,7 @@ export default async function handlePostResponse(client, req, res) {
 
   if (!models.isPlural(entity)) {
     if (body) {
-      return jsonResult(res, await client[entity].create({ data: body }));
+      return jsonResult(res, () => client[entity].create({ data: body }));
     } else {
       return jsonResult(
         res,
@@ -21,7 +21,7 @@ export default async function handlePostResponse(client, req, res) {
     }
   } else {
     if (body) {
-      return jsonResult(res, await client[models.searchInPlural(entity).lower].findMany(body))
+      return jsonResult(res, () => client[models.searchInPlural(entity).lower].findMany(body))
     } else {
       return jsonResult(
         res,

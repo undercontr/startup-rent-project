@@ -1,9 +1,10 @@
-export async function jsonResult(res, data, message = null) {
+export async function jsonResult(res, fn, message = null) {
     try {
+      const data = await fn()
       return res
         .status(200)
         .json({
-          success: data !== null ? true : false,
+          success: fn !== null ? true : false,
           rowCount: Array.isArray(data) ? data.length : 0,
           data: data,
           message: message,
@@ -13,7 +14,7 @@ export async function jsonResult(res, data, message = null) {
         .status(400)
         .json({
           success: false,
-          error: data !== null ? error.message : null,
+          error: fn !== null ? error.message : null,
           message: message,
         });
     }
