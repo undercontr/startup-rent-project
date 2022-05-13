@@ -6,13 +6,21 @@ export default async function handleGetResponse(client, req, res) {
 
   const [entityRegular, id] = req.query.prisma;
   const entity = entityRegular.toLowerCase();
-
+  const isPlural = models.isPlural(entity);
   if (id) {
-    return jsonResult(res, () =>
+    if (isPlural) {
+      return jsonResult(
+        res,
+        null,
+        "Please use non-plural model name for querying the entries"
+      );
+    } else {
+      return jsonResult(res, () =>
       client[entity].findUnique({ where: { id: Number(id) } })
     );
+    }
   } else {
-    if (!models.isPlural(entity)) {
+    if (!isPlural) {
       return jsonResult(
         res,
         null,

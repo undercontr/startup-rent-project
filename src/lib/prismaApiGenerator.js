@@ -17,7 +17,7 @@ export default async function prismaApiGenerator(req, res) {
   if (!models.lower.includes(entity) && !models.searchInPlural(entity).plural) {
     return jsonResult(res, null, "Cannot find this model: " + entity);
   }
-  console.log(req.method)
+  
   switch (req.method) {
     case "GET": {
       return handleGetResponse(client, req, res)
