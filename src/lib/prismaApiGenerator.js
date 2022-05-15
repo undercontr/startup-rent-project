@@ -6,10 +6,10 @@ import handleGetResponse from "./httpMethodResponses/handleGetResponse";
 import { jsonResult } from "./resultType";
 
 export default async function prismaApiGenerator(req, res) {
-  const client = global.client || new PrismaClient({ log: ["info"] });
+  const client = global.client || new PrismaClient();
   global.client = client;
 
-  const models = getModelNames(client)
+  const models = getModelNames(client);
 
   const [entityRegular] = req.query.prisma;
   const entity = entityRegular.toLowerCase()

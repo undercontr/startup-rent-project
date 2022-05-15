@@ -1,6 +1,6 @@
 datasource db {
     provider = "sqlite"
-    url = "file:./db.sqlite"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,15 +8,53 @@ generator client {
 }
 
 model User {
-    id Int @id @default(autoincrement())
-    name String
-    slug String @unique
-    password String
+    id        Int       @id @default(autoincrement())
+    name      String
+    firstName String
+    lastName   String?
+    slug      String    @unique
+    password  String
+    birthDate DateTime
+    email     String?
+    identityNo String 
+    userCars  UserCar[]
+}
+
+model UserCar {
+    user   User @relation(fields: [userId], references: [id])
+    userId Int  @unique
+    car    Car  @relation(fields: [carId], references: [id])
+    carId  Int
+
+    totalDistance Int
+    year          Int
+    image String
+
+    @@id([userId, carId])
 }
 
 model Car {
-    id Int @id @default(autoincrement())
-    name String 
-    image String
-    description String
+    id           Int       @id @default(autoincrement())
+    name         String
+    image        String
+    description  String
+    package      String
+    engineVolume Int
+    fulTypeId    Int
+    fuelType     FuelType  @relation(fields: [fulTypeId], references: [id])
+    brandId      Int
+    brand        CarBrand  @relation(fields: [brandId], references: [id])
+    userCars     UserCar[]
+}
+
+model CarBrand {
+    id   Int    @id @default(autoincrement())
+    name String
+    cars Car[]
+}
+
+model FuelType {
+    id   Int    @id @default(autoincrement())
+    name String
+    cars Car[]
 }
