@@ -27,7 +27,7 @@ export default function getModelNames(client) {
         const lowerModel = pluralModelName.toLowerCase();
         if (this.plural.includes(lowerModel)) {
             return {
-                lower: keys.find((e) => mappings[e].plural == pluralModelName).toLowerCase(),
+                lower: keys.find((e) => mappings[e].plural.toLowerCase() == pluralModelName).toLowerCase(),
                 regular: keys.find((e) => mappings[e].plural == pluralModelName),
                 plural: lowerModel
             } 

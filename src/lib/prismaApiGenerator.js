@@ -6,13 +6,15 @@ import handleGetResponse from "./httpMethodResponses/handleGetResponse";
 import { jsonResult } from "./resultType";
 
 export default async function prismaApiGenerator(req, res) {
+  const [entityRegular] = req.query.prisma;
+  const entity = entityRegular.toLowerCase()
+
   const client = global.client || new PrismaClient();
   global.client = client;
 
   const models = getModelNames(client);
 
-  const [entityRegular] = req.query.prisma;
-  const entity = entityRegular.toLowerCase()
+  // return jsonResult(res, () => models)
 
   if (!models.lower.includes(entity) && !models.searchInPlural(entity).plural) {
     return jsonResult(res, null, "Cannot find this model: " + entity);
