@@ -15,7 +15,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return json.error(res, null, "Lütfen kullanıcı adı ve şifresi belirleyiniz.")
     }
 
-    console.log(user)
     const isUserExists = await client.user.count({ where: { email: user.email } })
 
     if (isUserExists && isUserExists > 0) {
@@ -29,8 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     user.password = await cryptPassword(user.password)
-    const appUserInsertResult = await client.appUser.create({data: {birthDate: new Date(user.birthDate)}})
-    const userInsertResult = await client.user.create({ data: { name: user.fullName, email: user.email, password: user.password, userId: appUserInsertResult.id }, select: { password: false, name: true } })
+    const userInsertResult = await client.user.create({ data: { name: user.fullName, email: user.email, password: user.password }, select: { password: false, name: true } })
     return json.success(res, () => userInsertResult, "Başarılı bir şekilde kayıt oldunuz.")
 }
 

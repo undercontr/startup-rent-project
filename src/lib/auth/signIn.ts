@@ -4,8 +4,7 @@ import json from "../../lib/resultType";
 import tryCatch from "../helper/decorators/tryCatchNext"
 import { comparePassword } from "../../lib/helper/crypt";
 
-export default async function signIn(email, password) {
-
+export default async function signIn(email: string, password: string) {
     try {
         if (!(email && password)) {
             return { success: false, user: null }
@@ -13,7 +12,7 @@ export default async function signIn(email, password) {
 
         const client = new PrismaClient();
 
-        const user = await client.user.findUnique({ where: { email: email }, include: { user: true } })
+        const user = await client.user.findUnique({ where: { email: email }, include: { userCars: true, bought: true, sold: true } })
 
         if (!user.password) {
             return { success: false, user: null }
@@ -31,7 +30,6 @@ export default async function signIn(email, password) {
         }
 
     } catch (error) {
-        console.log(error)
         return {success: false, user: null}
     }
 }

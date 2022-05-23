@@ -17,6 +17,7 @@ export default NextAuth({
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       id: "credentials",
+      type: "credentials",
       name: "Kullanıcı adı ve şifre",
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
@@ -31,9 +32,8 @@ export default NextAuth({
         const user = await signIn(creds.email, creds.password)
         
         if (user.success) {
-          console.log(user)
           // Any object returned will be saved in `user` property of the JWT
-          return user
+          return user.user
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
@@ -46,9 +46,9 @@ export default NextAuth({
   session: {
     maxAge: 24 * 60 * 60,
     updateAge: 6 * 60 * 60,
-    strategy: "jwt"
+    strategy: "jwt",
   },
   pages: {
     signIn: "/auth/signin",
-  },
+  }
 })

@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const client = new PrismaClient();
 
-    const user = await client.appUser.findUnique({ where: { email: email }, include: { userCars: true, bought: true, sold: true, user: true } })
+    const user = await client.user.findUnique({ where: { email: email }, include: { userCars: true, bought: true, sold: true} })
 
     if (user) {
         if (await comparePassword(password, user.password)) {

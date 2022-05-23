@@ -17,7 +17,6 @@ export default function SignUp({ providers, csrfToken }) {
       body: JSON.stringify(payload),
     });
     const result = await resultRes.json();
-    console.log(result)
     setApiResult(result);
   };
 

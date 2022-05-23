@@ -44,22 +44,15 @@ model VerificationToken {
 model User {
     id            Int       @id @default(autoincrement())
     name          String?
-    email         String?   @unique
+    email         String   @unique
     emailVerified DateTime?
     password      String?
     image         String?
-    userId        Int?      @unique
-    user          AppUser?  @relation(fields: [userId], references: [id], onDelete: Cascade)
     accounts      Account[]
     sessions      Session[]
-}
 
-model AppUser {
-    id        Int       @id @default(autoincrement())
-    birthDate DateTime
     bought    Sales[]   @relation("userBuyer")
     sold      Sales[]   @relation("userSeller")
-    user      User?
     userCars  UserCar[]
 }
 
@@ -73,7 +66,7 @@ model UserCar {
     locationX     Float
     locationY     Float
     car           Car     @relation(fields: [carId], references: [id])
-    user          AppUser @relation(fields: [userId], references: [id])
+    user          User @relation(fields: [userId], references: [id])
 
     @@id([userId, carId])
 }
@@ -98,8 +91,8 @@ model Sales {
     userBuyerId      Int     @unique
     startingDistance Int
     distanceMade     Int
-    userBuyer        AppUser @relation("userBuyer", fields: [userBuyerId], references: [id])
-    userSeller       AppUser @relation("userSeller", fields: [userSellerId], references: [id])
+    userBuyer        User @relation("userBuyer", fields: [userBuyerId], references: [id])
+    userSeller       User @relation("userSeller", fields: [userSellerId], references: [id])
 }
 
 model CarBrand {

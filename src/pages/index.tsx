@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { useSession, signIn, signOut } from "next-auth/react"
+import Map from "../components/Utils/Map";
 
-export default function Home(props) {
+const Home = (props) => {
   return (
     <div>
       <Head>
@@ -10,9 +10,11 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container mx-auto">
-        
-        <h1 className="text-5xl">test deneme</h1>
+        <h1 className="text-red-500 font-serif text-5xl p-5 text-center"> Bir araç seçin...</h1>
+        <Map />
       </div>
     </div>
   );
-}
+};
+
+export default Home;
