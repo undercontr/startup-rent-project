@@ -1,9 +1,9 @@
 import React from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "700px",
 };
 
 const center = {
@@ -11,10 +11,11 @@ const center = {
   lng: 28.9783589,
 };
 
-function Map() {
+function Map(props) {
+  const {googleMap, mapChildren} = props
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAdoLyj21VhmagyYf7Y6fJZhTeVRbYOTBM",
+    googleMapsApiKey: "",
   });
 
   const [map, setMap] = React.useState(null);
@@ -31,8 +32,11 @@ function Map() {
 
   return isLoaded ? (
     <div className="m-3">
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10} mapContainerClassName={"rounded-xl"} onLoad={onLoad} onUnmount={onUnmount}>
+      <GoogleMap mapContainerStyle={containerStyle} clickableIcons={true} center={center} zoom={12} mapContainerClassName={"rounded-xl"} onLoad={onLoad} onUnmount={onUnmount} {...googleMap} >
         {/* Child components, such as markers, info windows, etc. */}
+        {mapChildren?.forEach(element => {
+          element
+        })}
       </GoogleMap>
     </div>
   ) : (
