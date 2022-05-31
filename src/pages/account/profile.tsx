@@ -4,12 +4,13 @@ import { getSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image"
+import Link from "next/link";
 
 const Profile = ({ user }: {user: User, userCars: Array<UserCar>}) => {
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-1 py-3 gap-3">
-        <div className="border-2 border-blue-500 rounded-xl p-5">
+      <div className="grid grid-cols-4 py-3 gap-3">
+        <div className="col-span-3 border-2 border-blue-500 rounded-xl p-5">
           <div className="flex justify-between items-center">
             <h1 className="text-5xl font-bold">Profilim</h1>
             <FontAwesomeIcon className="cursor-pointer hover:text-blue-500" icon={faEdit} />
@@ -34,6 +35,18 @@ const Profile = ({ user }: {user: User, userCars: Array<UserCar>}) => {
            
           </div>
         </div>
+        <div className="border-2 border-blue-500 rounded-xl p-5">
+          <h1 className="text-5xl font-bold">Hızlı Menü</h1>
+          <hr />
+          <div>
+            <ul>
+              <Link href={"my-cars"}><li className="cursor-pointer">Araçlarım</li></Link>
+              <Link href={"add-car"}><li className="cursor-pointer">Araç Ekle</li></Link>
+              <Link href={"sold"}><li className="cursor-pointer">Satışlarım</li></Link>
+              <Link href={"bought"}><li className="cursor-pointer">Satınalımlarım</li></Link>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -55,7 +68,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     name: userSet.name,
     email: userSet.email,
     image: userSet.image,
-    password: userSet.password.length > 0 ? true : false
+    password: userSet.password ? true : false
   }
 
   return {
