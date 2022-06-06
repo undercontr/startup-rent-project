@@ -1,7 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
-import json from "../../lib/resultType";
-import tryCatch from "../helper/decorators/tryCatchNext"
+import { PrismaClient } from "@prisma/client";
 import { comparePassword } from "../../lib/helper/crypt";
 
 export default async function signIn(email: string, password: string) {

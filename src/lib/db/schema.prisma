@@ -1,108 +1,107 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
-    id                Int     @id @default(autoincrement())
-    userId            Int
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String?
-    access_token      String?
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String?
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           Int      @id @default(autoincrement())
-    sessionToken String   @unique
-    userId       Int
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
 }
 
 model User {
-    id            Int       @id @default(autoincrement())
-    name          String?
-    email         String   @unique
-    emailVerified DateTime?
-    password      String?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-
-    bought    Sales[]   @relation("userBuyer")
-    sold      Sales[]   @relation("userSeller")
-    userCars  UserCar[]
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  accounts      Account[]
+  bought        Sales?    @relation("userBuyer")
+  sold          Sales?    @relation("userSeller")
+  sessions      Session[]
+  userCars      UserCar[]
 }
 
 model UserCar {
-    userId        Int     @unique
-    carId         Int
-    totalDistance Int
-    year          Int
-    images        String
-    dailyHireRate Decimal
-    locationX     Float
-    locationY     Float
-    car           Car     @relation(fields: [carId], references: [id])
-    user          User @relation(fields: [userId], references: [id])
+  userId        Int
+  carId         Int
+  totalDistance Int
+  images        String?
+  dailyHireRate Decimal
+  locationX     Float
+  locationY     Float
+  year          Int?
+  car           Car     @relation(fields: [carId], references: [id])
+  user          User    @relation(fields: [userId], references: [id])
 
-    @@id([userId, carId])
+  @@id([userId, carId])
 }
 
 model Car {
-    id           Int       @id @default(autoincrement())
-    name         String
-    image        String
-    description  String
-    package      String
-    engineVolume Int
-    fulTypeId    Int
-    brandId      Int
-    brand        CarBrand  @relation(fields: [brandId], references: [id])
-    fuelType     FuelType  @relation(fields: [fulTypeId], references: [id])
-    userCars     UserCar[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  image        String
+  description  String
+  package      String
+  engineVolume Int
+  fulTypeId    Int
+  brandId      Int
+  brand        CarBrand  @relation(fields: [brandId], references: [id])
+  fuelType     FuelType  @relation(fields: [fulTypeId], references: [id])
+  userCars     UserCar[]
 }
 
 model Sales {
-    id               Int     @id @default(autoincrement())
-    userSellerId     Int     @unique
-    userBuyerId      Int     @unique
-    startingDistance Int
-    distanceMade     Int
-    userBuyer        User @relation("userBuyer", fields: [userBuyerId], references: [id])
-    userSeller       User @relation("userSeller", fields: [userSellerId], references: [id])
+  id               Int  @id @default(autoincrement())
+  userSellerId     Int  @unique
+  userBuyerId      Int  @unique
+  startingDistance Int
+  distanceMade     Int
+  userBuyer        User @relation("userBuyer", fields: [userBuyerId], references: [id])
+  userSeller       User @relation("userSeller", fields: [userSellerId], references: [id])
 }
 
 model CarBrand {
-    id   Int    @id @default(autoincrement())
-    name String
-    cars Car[]
+  id   Int    @id @default(autoincrement())
+  name String
+  cars Car[]
 }
 
 model FuelType {
-    id   Int    @id @default(autoincrement())
-    name String
-    cars Car[]
+  id   Int    @id @default(autoincrement())
+  name String
+  cars Car[]
 }

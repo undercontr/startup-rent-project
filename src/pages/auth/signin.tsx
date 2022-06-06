@@ -4,6 +4,10 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 export default function SignIn({ csrfToken }) {
+  let redirectToUrl = ""
+  if (typeof window !== "undefined") {
+    redirectToUrl = new URL(window.location.href).searchParams.get("callbackUrl")
+  }
   const email = useRef(null);
   const pass = useRef(null);
 
@@ -34,9 +38,9 @@ export default function SignIn({ csrfToken }) {
                 e.preventDefault();
 
                 const result = await signIn("credentials", {
-                  redirect: false,
                   email: email.current.value,
                   password: pass.current.value,
+                  callbackUrl: redirectToUrl
                 });
                 if (result.ok) {
                   setMessage("Başarıyla giriş yaptınız.");
@@ -60,7 +64,7 @@ export default function SignIn({ csrfToken }) {
               className="text-white font-bold"
               onClick={(e) => {
                 e.preventDefault();
-                const result = signIn("google", { redirect: false });
+                const result = signIn("google", { redirect: true });
               }}
             >
               ile oturum aç

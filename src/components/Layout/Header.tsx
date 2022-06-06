@@ -15,20 +15,13 @@ const Header = (props) => {
           </div>
 
           <div className="flex justify-between items-center gap-10">
-            <div>
-              <Link href={"/rent"}>
-                <a className="text-white font-bold px-2 py-1">Kirala</a>
-              </Link>
-              <Link href={"/cars"}>
-                <a className="text-white font-bold px-2 py-1">Araçlar</a>
-              </Link>
-            </div>
+           
             {status == "authenticated" ? (
               <div className="flex gap-1">
                 <button onClick={() => signOut({redirect: true, callbackUrl: "/"})} className="bg-blue-500 text-sm text-white font-bold rounded px-2 py-1">Oturum Kapat</button>
                 <Link href={"/account"}>
-                  {session.user.image ? (
-                    <Image src={session.user.image} className="rounded-full cursor-pointer" alt="user" width={35} height={25} />
+                  {session.user?.image ? (
+                    <Image src={session.user?.image} className="rounded-full cursor-pointer" alt="user" width={35} height={25} />
                   ) : (
                     <a className="bg-blue-500 text-sm text-white font-bold rounded px-2 py-1">Hesabım</a>
                   )}

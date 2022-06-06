@@ -1,7 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import json from "../../lib/resultType";
-import tryCatch from "../../lib/helper/decorators/tryCatch"
+import tryCatch from "../../lib/helper/decorators/tryCatchNext"
 import { comparePassword } from "../../lib/helper/crypt";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
