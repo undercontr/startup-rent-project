@@ -6,7 +6,8 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image"
 import Link from "next/link";
 
-const Profile = ({ user }: {user: User, userCars: Array<UserCar>}) => {
+
+const Profile = ({ user }: {user: User}) => {
   return (
     <div className="container mx-auto">
       <div className="grid grid-cols-4 py-3 gap-3">

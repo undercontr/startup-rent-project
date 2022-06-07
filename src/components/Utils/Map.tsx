@@ -1,5 +1,5 @@
 import React from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, InfoBox, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
@@ -11,8 +11,8 @@ const center = {
   lng: 28.9783589,
 };
 
-function Map(props) {
-  const {googleMap, mapChildren} = props
+function Map({googleMap, mapChildren}) {
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "",
@@ -34,9 +34,9 @@ function Map(props) {
     <div className="m-3">
       <GoogleMap mapContainerStyle={containerStyle} clickableIcons={true} center={center} zoom={12} mapContainerClassName={"rounded-xl"} onLoad={onLoad} onUnmount={onUnmount} {...googleMap} >
         {/* Child components, such as markers, info windows, etc. */}
-        {mapChildren?.forEach(element => {
+        {/* {mapChildren?.forEach(element => {
           element
-        })}
+        })} */}
       </GoogleMap>
     </div>
   ) : (

@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { CarWithRelations } from "../../lib/types/prisma";
 import LocationCombobox from "../../components/Utils/LocationCombobox";
 import { useSession } from "next-auth/react";
+
 
 export default function AddCar(props) {
   const { data } = useSession();
@@ -10,8 +11,8 @@ export default function AddCar(props) {
   const [validationMessage, setValidationMessage] = useState<string>("");
   const [validationStatus, setValidationStatus] = useState<boolean>(false);
 
-  const [successStatus, setSuccessStatus] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
+  const [successStatus, setSuccessStatus] = useState<boolean>(false);
 
   const [brandId, setBrandId] = useState<string>("0");
   const [cars, setCars] = useState<CarWithRelations[]>([]);
@@ -30,7 +31,7 @@ export default function AddCar(props) {
     if (Number(yearValue) == 0) notValid.push("Yıl");
     if (Number(dailyHireRate) == 0) notValid.push("Günlük Kira Tutarı");
     if (Number(location.lng) == 0) notValid.push("Aracın Yeri");
-    console.log(notValid);
+    
     if (notValid.length > 0) {
       setValidationStatus(false);
       setValidationMessage(`<b>${notValid.join(", ")}</b> alanlarını kontrol ediniz.`);
@@ -127,7 +128,7 @@ export default function AddCar(props) {
         setCars(result.data);
       })
       .catch((error) => console.log("error", error));
-  }, [brandId, car]);
+  }, [brandId]);
 
   return (
     <div className="py-3 container mx-auto">
@@ -146,7 +147,7 @@ export default function AddCar(props) {
           className="text-center bg-red-300 border-2 border-red-500 py-2 my-2 rounded-xl"
         />
       ) : null}
-      {!successStatus ? (
+      {successStatus ? (
         <div
           dangerouslySetInnerHTML={{ __html: successMessage }}
           className="text-center bg-green-300 border-2 border-green-500 py-2 my-2 rounded-xl"
@@ -186,7 +187,7 @@ export default function AddCar(props) {
                 </p>
               </div>
             ) : (
-              <p className="text-xl font-bold">Bir araç seçin..</p>
+              <p className="text-xl font-bold">Bir araç seçin...</p>
             )}
           </div>
           <div>
@@ -263,6 +264,7 @@ AddCar.auth = true;
 
 export async function getServerSideProps(ctx) {
   const client = new PrismaClient();
+
   return {
     props: {
       brands: await client.carBrand.findMany(),

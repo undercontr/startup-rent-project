@@ -6,7 +6,6 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 export default function LocationCombobox({onLocationSelect}) {
     const [selected, setSelected] = useState();
     const [data, setData] = useState([]);
-    const [loc, setLoc] = useState({ lat: "", lng: "" });
     const [query, setQuery] = useState<string>("istanbul");
 
     useEffect(() => {
