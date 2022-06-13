@@ -9,6 +9,7 @@ datasource db {
 
 model Account {
   id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -19,7 +20,6 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  userId            Int
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -85,13 +85,15 @@ model Car {
 }
 
 model Sales {
-  id               Int  @id @default(autoincrement())
-  userSellerId     Int  @unique
-  userBuyerId      Int  @unique
+  id               Int      @id @default(autoincrement())
+  userSellerId     Int      @unique
+  userBuyerId      Int      @unique
   startingDistance Int
   distanceMade     Int
-  userBuyer        User @relation("userBuyer", fields: [userBuyerId], references: [id])
-  userSeller       User @relation("userSeller", fields: [userSellerId], references: [id])
+  startingDate     DateTime
+  totalDays        Int
+  userBuyer        User     @relation("userBuyer", fields: [userBuyerId], references: [id])
+  userSeller       User     @relation("userSeller", fields: [userSellerId], references: [id])
 }
 
 model CarBrand {

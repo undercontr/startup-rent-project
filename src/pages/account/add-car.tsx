@@ -4,7 +4,6 @@ import { CarWithRelations } from "../../lib/types/prisma";
 import LocationCombobox from "../../components/Utils/LocationCombobox";
 import { useSession } from "next-auth/react";
 
-
 export default function AddCar(props) {
   const { data } = useSession();
 
@@ -31,7 +30,7 @@ export default function AddCar(props) {
     if (Number(yearValue) == 0) notValid.push("Yıl");
     if (Number(dailyHireRate) == 0) notValid.push("Günlük Kira Tutarı");
     if (Number(location.lng) == 0) notValid.push("Aracın Yeri");
-    
+
     if (notValid.length > 0) {
       setValidationStatus(false);
       setValidationMessage(`<b>${notValid.join(", ")}</b> alanlarını kontrol ediniz.`);
@@ -141,21 +140,19 @@ export default function AddCar(props) {
           Ekle
         </button>
       </div>
-      {!validationStatus ? (
+      {validationMessage.length > 0 ? (
         <div
           dangerouslySetInnerHTML={{ __html: validationMessage }}
-          className="text-center bg-red-300 border-2 border-red-500 py-2 my-2 rounded-xl"
+          className={`text-center border-2 ${validationStatus? "bg-green-300 border-green-500" : "bg-red-300 border-red-500"} py-2 my-2 rounded-xl`}
         />
       ) : null}
-      {successStatus ? (
+      {successMessage.length > 0 ? (
         <div
           dangerouslySetInnerHTML={{ __html: successMessage }}
-          className="text-center bg-green-300 border-2 border-green-500 py-2 my-2 rounded-xl"
+          className={`text-center border-2 ${successStatus ? "bg-green-300 border-green-500" : "bg-red-300 border-red-500 "} py-2 my-2 rounded-xl`}
         />
-      ) : <div
-      dangerouslySetInnerHTML={{ __html: successMessage }}
-      className="text-center bg-red-300 border-2 border-red-500 py-2 my-2 rounded-xl"
-    />}
+      ) : null}
+      
       <div className="my-3 p-4 rounded-xl border-2 border-blue-500">
         <div className="grid grid-cols-8 gap-4 items-center">
           <div

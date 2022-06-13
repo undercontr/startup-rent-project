@@ -1,7 +1,24 @@
+import { PrismaClient } from "@prisma/client";
+import { getSession } from "next-auth/react";
 import Head from "next/head";
-import Map from "../components/Utils/Map";
+import React from "react";
+import CarMap from "../components/Utils/CarMap";
+import ReservationDialog from "../components/Utils/ReservationDialog";
 
 const Home = (props) => {
+
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [reservationData, setReservationData] = React.useState({});
+
+  const reservationClickHandler = (userCar) => {
+    setIsOpen(true)
+    setReservationData(userCar)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+
   return (
     <div>
       <Head>
@@ -11,12 +28,29 @@ const Home = (props) => {
       </Head>
       <div className="container mx-auto">
         <h1 className="text-red-500 font-serif text-5xl p-5 text-center"> Bir araç seçin...</h1>
-        <Map />
+        <CarMap mapChildren={props.pins} onClickReservation={reservationClickHandler}/>
       </div>
+      {/* <ReservationDialog onClose={closeModal} isOpen={isOpen} reservationData={reservationData}/> */}
+      <ReservationDialog onClickReservation={() => {}} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
     </div>
   );
 };
 
 export default Home;
+Home.auth = true;
 
-Home.auth = true
+export async function getServerSideProps(ctx) {
+  const client = new PrismaClient();
+  const session = await getSession(ctx)
+  const userCars = await client.userCar.findMany({ include: { car: {include: {brand: true, fuelType: true}}, user: true } });
+
+  return {
+    props: {
+      pins: userCars.filter((e) => e.user.email !== session?.user?.email).map(({ dailyHireRate, user: { password, ...user }, ...e }) => ({
+        ...e,
+        user: user,
+        dailyHireRate: dailyHireRate.toNumber(),
+      })),
+    },
+  };
+}
