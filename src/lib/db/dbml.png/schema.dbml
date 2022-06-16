@@ -1,0 +1,124 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Account {
+  id Int [pk, increment]
+  userId Int [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table Session {
+  id Int [pk, increment]
+  sessionToken String [unique, not null]
+  userId Int [not null]
+  expires DateTime [not null]
+  user User [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table User {
+  id Int [pk, increment]
+  name String
+  email String [unique, not null]
+  emailVerified DateTime
+  password String
+  image String
+  accounts Account [not null]
+  sessions Session [not null]
+  bought Sales [not null]
+  sold Sales [not null]
+  userCars UserCar [not null]
+}
+
+Table UserCar {
+  userId Int [unique, not null]
+  carId Int [not null]
+  totalDistance Int [not null]
+  year Int [not null]
+  images String [not null]
+  dailyHireRate Decimal [not null]
+  locationX Float [not null]
+  locationY Float [not null]
+  car Car [not null]
+  user User [not null]
+
+  indexes {
+    (userId, carId) [pk]
+  }
+}
+
+Table Car {
+  id Int [pk, increment]
+  name String [not null]
+  image String [not null]
+  description String [not null]
+  package String [not null]
+  engineVolume Int [not null]
+  fulTypeId Int [not null]
+  brandId Int [not null]
+  brand CarBrand [not null]
+  fuelType FuelType [not null]
+  userCars UserCar [not null]
+}
+
+Table Sales {
+  id Int [pk, increment]
+  userSellerId Int [unique, not null]
+  userBuyerId Int [unique, not null]
+  startingDistance Int [not null]
+  distanceMade Int [not null]
+  userBuyer User [not null]
+  userSeller User [not null]
+}
+
+Table CarBrand {
+  id Int [pk, increment]
+  name String [not null]
+  cars Car [not null]
+}
+
+Table FuelType {
+  id Int [pk, increment]
+  name String [not null]
+  cars Car [not null]
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Session.userId > User.id [delete: Cascade]
+
+Ref: UserCar.carId > Car.id
+
+Ref: UserCar.userId > User.id
+
+Ref: Car.brandId > CarBrand.id
+
+Ref: Car.fulTypeId > FuelType.id
+
+Ref: Sales.userBuyerId > User.id
+
+Ref: Sales.userSellerId > User.id

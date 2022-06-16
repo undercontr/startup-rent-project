@@ -67,7 +67,7 @@ model UserCar {
   year          Int?
   car           Car     @relation(fields: [carId], references: [id])
   user          User    @relation(fields: [userId], references: [id])
-  Sales         Sales?  @relation("userCar")
+  Sales         Sales[]  @relation("userCar")
 }
 
 model Car {
