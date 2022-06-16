@@ -27,10 +27,16 @@ export default function ReservationDialog({ isOpen = true, isLoading, closeModal
 
   }
 
+  const onCloseHandler = (e) => {
+    setRentPeriod(0);
+    setTotalAmount(0);
+    closeModal(e);
+  }
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={onCloseHandler}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -107,11 +113,7 @@ export default function ReservationDialog({ isOpen = true, isLoading, closeModal
                     <button
                       type="button"
                       className="rounded-md bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-700 transition-all"
-                      onClick={(e) => {
-                        setRentPeriod(0);
-                        setTotalAmount(0);
-                        closeModal(e);
-                      }}
+                      onClick={onCloseHandler}
                     >
                       Vazgeç
                     </button>

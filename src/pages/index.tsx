@@ -3,10 +3,12 @@ import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import React from "react";
 import CarMap from "../components/Utils/CarMap";
+import InfoModal from "../components/Utils/InfoModal";
 import ReservationDialog from "../components/Utils/ReservationDialog";
 import { getUserByEmail } from "../lib/db/repo";
 
 const Home = (props) => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [isRentBtnClick, setIsRentBtnClick] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false)
   const [reservationData, setReservationData] = React.useState({});
@@ -24,14 +26,15 @@ const Home = (props) => {
       ...inputData
     }
 
-    // const salesResponse = await fetch("/api/rentcar", {
-      
-    //   body: JSON.stringify(payload)
-    // })
+   setTimeout(() => {
+     setIsModalOpen(true);
+     closeModal()
+   }, 2000)
   }
 
   const closeModal = () => {
     setIsOpen(false)
+    setIsRentBtnClick(false);
   }
 
   return (
@@ -45,8 +48,8 @@ const Home = (props) => {
         <h1 className="text-red-500 font-serif text-5xl p-5 text-center"> Bir araç seçin...</h1>
         <CarMap mapChildren={props.pins} onClickRent={rentClickHandler}/>
       </div>
-      {/* <ReservationDialog onClose={closeModal} isOpen={isOpen} reservationData={reservationData}/> */}
       <ReservationDialog isLoading={isRentBtnClick} onClickReservation={reservationClickHandler} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
+      <InfoModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} title="Başarılı!" content="Kiralama işleminiz araç sahibine iletildi. Onay sürecinden sonra işleminiz başarılı ile tamamlanacaktır" btnText="Kapat" />
     </div>
   );
 };
