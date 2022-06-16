@@ -7,7 +7,7 @@ import ReservationDialog from "../components/Utils/ReservationDialog";
 import { getUserByEmail } from "../lib/db/repo";
 
 const Home = (props) => {
-  const {data, status} = useSession()
+  const [isRentBtnClick, setIsRentBtnClick] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false)
   const [reservationData, setReservationData] = React.useState({});
 
@@ -17,16 +17,17 @@ const Home = (props) => {
   }
 
   const reservationClickHandler = async (inputData) => {
+    setIsRentBtnClick(true);
     const payload = {
       userBuyerId: props.user.id,
       userSellerId: reservationData.user.id,
       ...inputData
     }
 
-    const salesResponse = await fetch("/api/rentcar", {
+    // const salesResponse = await fetch("/api/rentcar", {
       
-      body: JSON.stringify(payload)
-    })
+    //   body: JSON.stringify(payload)
+    // })
   }
 
   const closeModal = () => {
@@ -45,7 +46,7 @@ const Home = (props) => {
         <CarMap mapChildren={props.pins} onClickRent={rentClickHandler}/>
       </div>
       {/* <ReservationDialog onClose={closeModal} isOpen={isOpen} reservationData={reservationData}/> */}
-      <ReservationDialog onClickReservation={reservationClickHandler} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
+      <ReservationDialog isLoading={isRentBtnClick} onClickReservation={reservationClickHandler} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
     </div>
   );
 };
@@ -67,7 +68,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       pins: pins,
-      user: await getUserByEmail(session?.user.email)
+      user: await getUserByEmail(session?.user?.email)
     },
   };
 }

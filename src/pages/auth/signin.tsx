@@ -16,7 +16,7 @@ export default function SignIn({ csrfToken }) {
   return (
     <>
       <div className="flex flex-col  pt-2 justify-center items-center">
-        {message && <div className="bg-blue-300 border-2 border-blue-500 p-2 rounded text-center">{message}</div>}
+        {message && <div className="bg-red-300 border-2 border-red-500 p-2 rounded text-center">{message}</div>}
         <div className="border-2 border-black p-3 m-2 rounded-xl">
           <form method="post" action="/api/auth/callback/credentials">
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
@@ -40,8 +40,14 @@ export default function SignIn({ csrfToken }) {
                 const result = await signIn("credentials", {
                   email: email.current.value,
                   password: pass.current.value,
-                  callbackUrl: redirectToUrl
+                  callbackUrl: redirectToUrl,
+                  redirect: false
                 });
+                if (result.ok) {
+                  window.location.href = result.url;
+                } else {
+                  setMessage("Giriş sırasında hata!")
+                }
               }}
               className="bg-black block w-full text-white font-bold p-2 my-4 rounded-xl"
             >
@@ -56,10 +62,11 @@ export default function SignIn({ csrfToken }) {
               alt="google"
             />
             <button
+              type="submit"
               className="text-white font-bold"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-                const result = signIn("google", { redirect: true });
+                await signIn("google", { callbackUrl: redirectToUrl });
               }}
             >
               ile oturum aç

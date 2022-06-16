@@ -1,8 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import DatePicker from "react-datepicker";
+import LoadingSpinner from "./LoadingSpinner";
 
-export default function ReservationDialog({ isOpen = true, closeModal, onClickReservation, reservationData }) {
+export default function ReservationDialog({ isOpen = true, isLoading, closeModal, onClickReservation, reservationData }) {
   const [rentPeriod, setRentPeriod] = useState(0);
   const [totalAmount, setTotalAmount] = useState(reservationData.dailyHireRate || 0);
   const [startingDate, setStartingDate] = useState(new Date());
@@ -55,6 +56,7 @@ export default function ReservationDialog({ isOpen = true, closeModal, onClickRe
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-md leading-6 text-gray-900">
+                  
                     <span>{reservationData.user?.email} kullanıcısına ait</span>
                     <br />
                     <span className="font-bold text-xl text-gray-900">
@@ -86,8 +88,8 @@ export default function ReservationDialog({ isOpen = true, closeModal, onClickRe
                   <div className="flex justify-start items-center gap-5 mt-10">
                     <button
                       type="button"
-                      className={`rounded-md bg-green-500 px-4 py-2 text-sm font-bold text-white hover:bg-green-700 transition-all ${
-                        rentPeriod == 0 ? "opacity-30" : null
+                      className={`rounded-md bg-green-500 p-2 text-sm font-bold text-white hover:bg-green-700 transition-all ${
+                        rentPeriod == 0 || isLoading ? "opacity-30" : null
                       }`}
                       onClick={() => {
                         onClickReservation({
@@ -97,7 +99,10 @@ export default function ReservationDialog({ isOpen = true, closeModal, onClickRe
                       }}
                       disabled={rentPeriod == 0 ? true : false}
                     >
+                    <div className="flex align-center gap-2">
+                    {isLoading && <LoadingSpinner />}
                       Kirala ({Intl.NumberFormat("tr-TR", { currency: "TRY", style: "currency" }).format(totalAmount)})
+                    </div>
                     </button>
                     <button
                       type="button"
