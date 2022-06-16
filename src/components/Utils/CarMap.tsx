@@ -17,7 +17,7 @@ const center = {
 
 const options = { closeBoxURL: "", enableEventPropagation: true };
 
-function CarMap({ mapChildren, onClickReservation }) {
+function CarMap({ mapChildren, onClickRent }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "",
@@ -92,7 +92,7 @@ function CarMap({ mapChildren, onClickReservation }) {
                   <a
                     onClick={() => {
                       console.log("onCLickReservation fired")
-                      onClickReservation(userCar)
+                      onClickRent(userCar)
                     }}
                     className="bg-blue-500  hover:bg-blue-700 transition-all cursor-pointer rounded-md p-1 block text-center font-bold text-white"
                   >

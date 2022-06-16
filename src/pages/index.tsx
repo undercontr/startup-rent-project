@@ -1,18 +1,32 @@
 import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import React from "react";
 import CarMap from "../components/Utils/CarMap";
 import ReservationDialog from "../components/Utils/ReservationDialog";
+import { getUserByEmail } from "../lib/db/repo";
 
 const Home = (props) => {
-
+  const {data, status} = useSession()
   const [isOpen, setIsOpen] = React.useState(false)
   const [reservationData, setReservationData] = React.useState({});
 
-  const reservationClickHandler = (userCar) => {
+  const rentClickHandler = (userCar) => {
     setIsOpen(true)
     setReservationData(userCar)
+  }
+
+  const reservationClickHandler = async (inputData) => {
+    const payload = {
+      userBuyerId: props.user.id,
+      userSellerId: reservationData.user.id,
+      ...inputData
+    }
+
+    const salesResponse = await fetch("/api/rentcar", {
+      
+      body: JSON.stringify(payload)
+    })
   }
 
   const closeModal = () => {
@@ -28,10 +42,10 @@ const Home = (props) => {
       </Head>
       <div className="container mx-auto">
         <h1 className="text-red-500 font-serif text-5xl p-5 text-center"> Bir araç seçin...</h1>
-        <CarMap mapChildren={props.pins} onClickReservation={reservationClickHandler}/>
+        <CarMap mapChildren={props.pins} onClickRent={rentClickHandler}/>
       </div>
       {/* <ReservationDialog onClose={closeModal} isOpen={isOpen} reservationData={reservationData}/> */}
-      <ReservationDialog onClickReservation={() => {}} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
+      <ReservationDialog onClickReservation={reservationClickHandler} closeModal={closeModal} isOpen={isOpen} reservationData={reservationData} />
     </div>
   );
 };
@@ -44,13 +58,16 @@ export async function getServerSideProps(ctx) {
   const session = await getSession(ctx)
   const userCars = await client.userCar.findMany({ include: { car: {include: {brand: true, fuelType: true}}, user: true } });
 
+  const pins = userCars.filter((e) => e.user.email !== session?.user?.email).map(({ dailyHireRate, user: { password, ...user }, ...e }) => ({
+    ...e,
+    user: user,
+    dailyHireRate: dailyHireRate.toNumber(),
+  }));
+
   return {
     props: {
-      pins: userCars.filter((e) => e.user.email !== session?.user?.email).map(({ dailyHireRate, user: { password, ...user }, ...e }) => ({
-        ...e,
-        user: user,
-        dailyHireRate: dailyHireRate.toNumber(),
-      })),
+      pins: pins,
+      user: await getUserByEmail(session?.user.email)
     },
   };
 }

@@ -1,9 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import DatePicker from "react-datepicker";
 
 export default function ReservationDialog({ isOpen = true, closeModal, onClickReservation, reservationData }) {
-  const [rentPeriod, setRentPeriod] = useState(1);
+  const [rentPeriod, setRentPeriod] = useState(0);
   const [totalAmount, setTotalAmount] = useState(reservationData.dailyHireRate || 0);
+  const [startingDate, setStartingDate] = useState(new Date());
 
   const dayInputChangeHandler = (e) => {
     if (e.target.value > 30) {
@@ -14,6 +16,15 @@ export default function ReservationDialog({ isOpen = true, closeModal, onClickRe
     setRentPeriod(result);
     setTotalAmount(Number(result) * reservationData.dailyHireRate);
   };
+
+  const onDateTimePickerChange = (date: Date) => {
+    if (date.getTime() < Date.now()) {
+      setStartingDate(new Date())
+    } else {
+      setStartingDate(date)
+    }
+
+  }
 
   return (
     <>
@@ -52,33 +63,49 @@ export default function ReservationDialog({ isOpen = true, closeModal, onClickRe
                   </Dialog.Title>
                   <hr />
                   <div className="my-2">
+                    <label htmlFor="">Aracı teslim alacağınz gün ve saat</label>
+                    {/* <input type="week" className="w-full border-2 rounded-md border-gray-300 p-2" onChange={dayInputChangeHandler} /> */}
+                    <div className="w-full border-2 rounded-md border-gray-300 p-2"><DatePicker selected={startingDate} onChange={onDateTimePickerChange} /></div>
+                  </div>
+                  <div className="my-2">
                     <label htmlFor="">Kiralamak istediğiniz gün sayısı</label>
-                    <input type="text" className="border-2 rounded-md border-gray-300 p-2" onChange={dayInputChangeHandler} />
+                    <input
+                      type="text"
+                      className="w-full border-2 rounded-md border-gray-300 p-2"
+                      onChange={dayInputChangeHandler}
+                    />
                   </div>
                   <div className="mt-5">
                     <p className="text-sm text-gray-700 text-justify">
                       Bu aracı <b>{reservationData.totalDistance?.toLocaleString("tr")}</b> kilometrede{" "}
-                      <b>{reservationData.user?.email}</b> kullanıcısından <b>{rentPeriod}</b> gün süre ile kiralamak istediğinize
+                      <b>{reservationData.user?.email}</b> kullanıcısından <b>{startingDate.toLocaleDateString("tr")}</b> tarihi itibari ile <b>{rentPeriod}</b> gün süre ile kiralayıp <b>{new Date(startingDate.getFullYear(), startingDate.getMonth(), startingDate.getDate() + Number(rentPeriod)).toLocaleDateString("tr")}</b> tarihinde iade edecek şekilde kiralamak istediğinize
                       emin misiniz?
                     </p>
                   </div>
 
-                  <div className="flex justify-start items-center gap-5 mt-5">
+                  <div className="flex justify-start items-center gap-5 mt-10">
                     <button
                       type="button"
-                      className={`rounded-md bg-green-500 px-4 py-2 text-sm font-bold text-white hover:bg-green-700 transition-all ${rentPeriod == 0 ? "opacity-30" : null}`}
-                      onClick={onClickReservation}
+                      className={`rounded-md bg-green-500 px-4 py-2 text-sm font-bold text-white hover:bg-green-700 transition-all ${
+                        rentPeriod == 0 ? "opacity-30" : null
+                      }`}
+                      onClick={() => {
+                        onClickReservation({
+                          totalDays: Number(rentPeriod),
+                          startingDate: startingDate
+                        })
+                      }}
                       disabled={rentPeriod == 0 ? true : false}
                     >
-                      Rezervasyon Yap ({Intl.NumberFormat("tr-TR", { currency: "TRY", style: "currency" }).format(totalAmount)})
+                      Kirala ({Intl.NumberFormat("tr-TR", { currency: "TRY", style: "currency" }).format(totalAmount)})
                     </button>
                     <button
                       type="button"
                       className="rounded-md bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-700 transition-all"
                       onClick={(e) => {
-                        setRentPeriod(0)
-                        setTotalAmount(0)
-                        closeModal(e)
+                        setRentPeriod(0);
+                        setTotalAmount(0);
+                        closeModal(e);
                       }}
                     >
                       Vazgeç

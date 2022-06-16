@@ -42,11 +42,6 @@ export default function SignIn({ csrfToken }) {
                   password: pass.current.value,
                   callbackUrl: redirectToUrl
                 });
-                if (result.ok) {
-                  setMessage("Başarıyla giriş yaptınız.");
-                } else {
-                  setMessage("Giriş sırasında hata");
-                }
               }}
               className="bg-black block w-full text-white font-bold p-2 my-4 rounded-xl"
             >
