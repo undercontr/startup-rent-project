@@ -1,8 +1,10 @@
+import axios from "axios";
 import { getProviders, signIn } from "next-auth/react";
 import { getCsrfToken } from "next-auth/react";
 import { useState } from "react";
 
 export default function SignUp({ providers, csrfToken }) {
+  console.log(axios)
   const [apiResult, setApiResult] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
@@ -11,13 +13,8 @@ export default function SignUp({ providers, csrfToken }) {
   const submitBtnClickHandler = async (e) => {
     e.preventDefault();
     const payload = {email, password, fullName, birthDate};
-    const resultRes = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(payload),
-    });
-    const result = await resultRes.json();
-    setApiResult(result);
+    const result = await axios.post("/api/auth/signup", payload)
+    setApiResult(result.data);
   };
 
   return (

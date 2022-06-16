@@ -49,8 +49,8 @@ model User {
   password      String?
   image         String?
   accounts      Account[]
-  bought        Sales?    @relation("userBuyer")
-  sold          Sales?    @relation("userSeller")
+  bought        Sales[]    @relation("userBuyer")
+  sold          Sales[]    @relation("userSeller")
   sessions      Session[]
   userCars      UserCar[]
 }
@@ -65,9 +65,10 @@ model UserCar {
   locationX     Float
   locationY     Float
   year          Int?
+  isOccupied    Boolean @default(false)
   car           Car     @relation(fields: [carId], references: [id])
   user          User    @relation(fields: [userId], references: [id])
-  Sales         Sales[]  @relation("userCar")
+  sales         Sales[] @relation("userCar")
 }
 
 model Car {
@@ -86,15 +87,15 @@ model Car {
 
 model Sales {
   id           Int      @id @default(autoincrement())
-  userSellerId Int      @unique
-  userBuyerId  Int      @unique
-  userCarId    Int      @unique
-  distanceMade Int
+  userSellerId Int      
+  userBuyerId  Int      
+  userCarId    Int      
+  distanceMade Int?
   startingDate DateTime
   totalDays    Int
-  isApproved   Boolean
-  isFinished   Boolean
-  salesDate    DateTime
+  isApproved   Boolean?
+  isFinished   Boolean? 
+  salesDate    DateTime? 
   userBuyer    User     @relation("userBuyer", fields: [userBuyerId], references: [id])
   userSeller   User     @relation("userSeller", fields: [userSellerId], references: [id])
   userCar      UserCar  @relation("userCar", fields: [userCarId], references: [id])

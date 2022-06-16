@@ -30,7 +30,7 @@ export default function ReservationDialog({ isOpen = true, isLoading, closeModal
   const onCloseHandler = (e) => {
     setRentPeriod(0);
     setTotalAmount(0);
-    closeModal(e);
+    closeModal();
   }
 
   return (
@@ -101,7 +101,7 @@ export default function ReservationDialog({ isOpen = true, isLoading, closeModal
                         onClickReservation({
                           totalDays: Number(rentPeriod),
                           startingDate: startingDate
-                        })
+                        }, setRentPeriod)
                       }}
                       disabled={rentPeriod == 0 ? true : false}
                     >

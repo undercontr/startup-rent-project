@@ -3,6 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { CarWithRelations } from "../../lib/types/prisma";
 import LocationCombobox from "../../components/Utils/LocationCombobox";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export default function AddCar(props) {
   const { data } = useSession();
@@ -21,7 +22,7 @@ export default function AddCar(props) {
   const [yearValue, setYearValue] = useState<string>(new Date().getFullYear().toString());
   const [location, setLocation] = useState<{ lat: Number; lng: Number }>({ lat: 0, lng: 0 });
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     let notValid = [];
 
     if (Number(brandId) == 0) notValid.push("Marka");
@@ -48,22 +49,10 @@ export default function AddCar(props) {
         locationY: Number(location.lat),
       };
 
-      const headers = new Headers();
-      headers.append("Content-Type", "application/json");
-
-      const requestOptions: RequestInit = {
-        method: "POST",
-        headers,
-        body: JSON.stringify(sendData),
-        redirect: "follow",
-      };
-
-      fetch("/api/addcar", requestOptions)
-        .then((res) => res.json())
-        .then((json) => {
-          setSuccessMessage(json.message);
-          setSuccessStatus(json.success);
-        });
+      axios.post("/api/addcar", sendData).then(json => {
+        setSuccessMessage(json.data.message);
+        setSuccessStatus(json.data.success);
+      })
     }
   };
 
@@ -101,10 +90,8 @@ export default function AddCar(props) {
   };
 
   useEffect(() => {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
 
-    const body = JSON.stringify({
+    const body = {
       where: {
         brandId: Number(brandId),
       },
@@ -112,21 +99,14 @@ export default function AddCar(props) {
         fuelType: true,
         brand: true,
       },
-    });
-
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers,
-      body,
-      redirect: "follow",
     };
 
-    fetch("/api/getcars", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setCars(result.data);
+      axios.post("/api/getcars", body).then(json => {
+        setCars(json.data.data);
+      }).catch((error) => {
+        console.log("error", error)
       })
-      .catch((error) => console.log("error", error));
+
   }, [brandId]);
 
   return (

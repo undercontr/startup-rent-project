@@ -60,7 +60,7 @@ function CarMap({ mapChildren, onClickRent }) {
               lng: userCar.locationX,
             };
             return (
-              <InfoWindow key={userCar.carId + "" + userCar.userId} position={position} options={options}>
+              <InfoWindow key={userCar.id} position={position} options={options}>
                 <div className="">
                   <div className="">
                     <h1 className="text-md text-blue-900 font-bold">{`${userCar.car.brand.name} ${userCar.car.name} ${userCar.car.package} ${userCar.year}`}</h1>

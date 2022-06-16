@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import axios from 'axios';
 
 
 export default function LocationCombobox({onLocationSelect}) {
@@ -11,15 +12,11 @@ export default function LocationCombobox({onLocationSelect}) {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
           if (query.length > 3) {
-            fetch(
-              `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${
-                process.env.NEXT_PUBLIC_GEOCODING_API
-              }`
-            )
-              .then((res) => res.json())
-              .then((json) => {
-                setData(json.results);
-              });
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${
+              process.env.NEXT_PUBLIC_GEOCODING_API
+            }`).then((json) => {
+              setData(json.data.results);
+            });
           }
     
           if (query.length <= 0) {
