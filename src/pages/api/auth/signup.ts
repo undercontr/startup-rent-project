@@ -5,7 +5,7 @@ import checkIdentity from "../../../lib/helper/identityCheck"
 import passwordRequirement from "../../../lib/helper/passwordRequirement"
 
 import { cryptPassword } from "../../../lib/helper/crypt"
-import tryCatch from "../../../lib/helper/decorators/tryCatchNext";
+import {tryCatchNext} from "../../../lib/helper/decorators/tryCatch";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = new PrismaClient();
@@ -32,4 +32,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return json.success(res, () => userInsertResult, "Başarılı bir şekilde kayıt oldunuz.")
 }
 
-export default tryCatch(handler, "Kayıt olurken hata oluştu")
+export default tryCatchNext(handler, "Kayıt olurken hata oluştu")

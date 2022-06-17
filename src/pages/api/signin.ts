@@ -1,7 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import json from "../../lib/resultType";
-import tryCatch from "../../lib/helper/decorators/tryCatchNext"
+import {tryCatchNext} from "../../lib/helper/decorators/tryCatch"
 import { comparePassword } from "../../lib/helper/crypt";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -29,4 +29,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 }
 
-export default tryCatch(handler, "Oturum açarken bir hata oluştu")
+export default tryCatchNext(handler, "Oturum açarken bir hata oluştu")

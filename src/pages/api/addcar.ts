@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import tryCatch from "../../lib/helper/decorators/tryCatchNext";
+import {tryCatchNext} from "../../lib/helper/decorators/tryCatch";
 import json from "../../lib/resultType"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,4 +21,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return json.success(res, () => client.userCar.create({data: addCarObj}), "Araç başarıyla eklendi")
 }
 
-export default tryCatch(handler, "Araç eklenirken bir hata oluştu")
+export default tryCatchNext(handler, "Araç eklenirken bir hata oluştu")
