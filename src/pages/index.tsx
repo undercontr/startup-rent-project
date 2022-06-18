@@ -99,10 +99,12 @@ export async function getServerSideProps(ctx) {
       dailyHireRate: dailyHireRate.toNumber(),
     }));
 
+    const userQueryResult = await getUserByEmail(session?.user?.email)
+
   return {
     props: {
       pins: pins,
-      user: await getUserByEmail(session?.user?.email),
+      user: userQueryResult.success && userQueryResult.user,
     },
   };
 }
