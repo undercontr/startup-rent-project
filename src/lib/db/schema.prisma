@@ -61,7 +61,7 @@ model UserCar {
   carId         Int
   totalDistance Int
   images        String?
-  dailyHireRate Decimal
+  dailyHireRate Float
   locationX     Float
   locationY     Float
   year          Int?

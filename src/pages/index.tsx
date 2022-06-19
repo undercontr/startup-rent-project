@@ -7,8 +7,7 @@ import CarMap from "../components/Utils/CarMap";
 import InfoModal from "../components/Utils/InfoModal";
 import ReservationDialog from "../components/Utils/ReservationDialog";
 import { getUserByEmail } from "../lib/db/repo";
-import {getUserCarsIndex} from "../lib/helper/restRepository"
-
+import { getUserCarsIndex } from "../lib/helper/restRepository";
 
 const Home = (props) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -31,19 +30,21 @@ const Home = (props) => {
       ...inputData,
     };
 
-    axios.post("/api/rentcar", payload).then((json) => {
-      closeModal();
-      setIsModalOpen(true);
-      setRentPeriod(0);
+    axios
+      .post("/api/rentcar", payload)
+      .then((json) => {
+        closeModal();
+        setIsModalOpen(true);
+        setRentPeriod(0);
 
-      getUserCarsIndex(props.user.email).then((pinsData) => {
-        setPins(pinsData)
+        getUserCarsIndex(props.user.email).then((pinsData) => {
+          setPins(pinsData);
+        });
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+        setIsRentBtnClick(false);
       });
-    })
-    .catch((error) => {
-      console.error(error.response.data)
-      setIsRentBtnClick(false);
-    });
   };
 
   const closeModal = () => {
@@ -93,13 +94,12 @@ export async function getServerSideProps(ctx) {
 
   const pins = userCars
     .filter((e) => e.user.email !== session?.user?.email)
-    .map(({ dailyHireRate, user: { password, ...user }, ...e }) => ({
+    .map(({ user: { password, ...user }, ...e }) => ({
       ...e,
       user: user,
-      dailyHireRate: dailyHireRate.toNumber(),
     }));
 
-    const userQueryResult = await getUserByEmail(session?.user?.email)
+  const userQueryResult = await getUserByEmail(session?.user?.email);
 
   return {
     props: {

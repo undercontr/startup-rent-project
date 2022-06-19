@@ -45,9 +45,7 @@ export async function getServerSideProps(ctx) {
   });
   return {
     props: {
-      userCars: userCars.map((car) => {
-        return { ...car, dailyHireRate: car.dailyHireRate.toNumber() };
-      }),
+      userCars
     },
   };
 }

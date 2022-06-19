@@ -1,10 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import { AppContext } from "next/app";
 import SoldCard from "../../components/PageElements/SoldCard";
 
 export default function Sold({soldCars}) {
+
+  const confirmClickHandler = (salesData) => {
+    //
+    console.log(salesData)
+  }
+
+  const cancelClickHandler = (salesData) => {
+    //
+  }
+
 	console.log(soldCars)
   return (
     <div className="container mx-auto">
@@ -22,10 +31,10 @@ export default function Sold({soldCars}) {
       <hr />
       <div className="my-3 grid grid-cols-1 gap-2">
         {soldCars.map((e) => (
-			<div key={e.id}>asd</div>
+			<SoldCard key={e.id} salesData={e} onClickConfirm={confirmClickHandler} onClickCancel={cancelClickHandler} />
 		))}
 
-		<SoldCard />
+		
 		
       </div>
     </div>
@@ -52,10 +61,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
       },
     },
   });
-  console.log(soldCars)
+  
   return {
     props: {
-      soldCars: soldCars,
+      soldCars: JSON.parse(JSON.stringify(soldCars)),
     },
   };
 }
