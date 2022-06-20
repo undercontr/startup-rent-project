@@ -1,34 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# C2C Car Rental System
+A web application that lets people rent their cars to each other without handling car rental companies. UI and database system built up for such purpose.
 
-## Getting Started
+## Stack
+Language: **TypeScript 4.7**\
+Frontend Library: **Next.js v12.1.6 (React v18.1)**\
+Database: **SQLite**\
+ORM: **Prisma**\ (TypeORM for future SQL development)
+Authentication System: **Next-Auth (an plugin for Next.js)**
 
-First, run the development server:
+## Stack Explanation
+The next package used for SSR and SSG problems in order to access database and perform CRUD operations while writing the frontend with React JSX. With the next package we were able to write an API inside React app that should be served by Node.js and accessing high level elements of backend programming.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Prisma is an ORM that handles database operations in not a traditional ORM way. We wrote a schema and database was ready. Database operations are very simplifed and transactions are supported. We decided to use Prisma becasue MongoDb support. It lets you write a schema for MongoDb. We might migrate to TypeORM if we wanted to keep the SQL.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Since this will be a slightly larger application then normal blog app we decied to use TypeScript as for both backend and frontend programming because the types are mattered the most of the development process. There are several cases that relations made in Prisma ORM includes relations or not. So we had to write types to know which relation should be included. Next.js and Prisma both has very good integration with TypeScript (not to mention React).
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+*For a demo process we used SQlite database system but for future developments we will migrate to **MongoDb** for even better Javascript and Typescript integration.*
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+For authentication purposes we used Next-Auth package and use their providers to let user login to the system. Google is currently only supported provider to login. Traditional login system (email, password) is also supported.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Car Rental
+Users can simply add their cars and wait for the rent requests. It is simple as that. It is very easy to use. There is a Google maps with the car pins on it. User can select one of the car and choose date then send a rent request to the owner of the car. Owner of the car has to decide whether car should be rented or not. Owner can approve or deny the rent request and renter will be informed.
