@@ -1,61 +1,24 @@
-export default function SoldCard({ salesData, onClickConfirm, onClickCancel, onClickCarReturn }) {
-  const confirmButtonClickHandler = () => {
-    onClickConfirm(salesData);
-  };
-
-  const cancelButtonClickHandler = () => {
-    onClickCancel(salesData);
-  };
-
-  const carReturnButtonClickHandler = () => {
-    onClickCarReturn(salesData);
-  };
+export default function BoughtCard({ salesData }) {
 
   const statusGenerate = () => {
     if (salesData.isApproved !== null) {
       if (salesData.isApproved == true) {
         if (salesData.isFinished == true) {
-          return { border: "border-blue-400", bg: "bg-blue-400", keyword: "Tamamlanmış", btnJsx: null };
+          return { border: "border-blue-400", bg: "bg-blue-400", keyword: "Tamamlanmış" };
         }
         return {
           border: "border-green-400",
           bg: "bg-green-400",
           keyword: "Onaylanmış",
-          btnJsx: (
-            <div className="grid grid-cols-1 gap-3">
-              <button
-                onClick={carReturnButtonClickHandler}
-                className="bg-slate-300 py-3 rounded-lg font-bold text-slate-700 transition-all hover:bg-slate-400"
-              >
-                Araç Teslim Al
-              </button>
-            </div>
-          ),
         };
       } else {
-        return { border: "border-red-400", bg: "bg-red-400", keyword: "Reddedilmiş", btnJsx: null };
+        return { border: "border-red-400", bg: "bg-red-400", keyword: "Reddedilmiş" };
       }
     } else {
       return {
         border: "border-orange-400",
         bg: "bg-orange-400",
         keyword: "Aksiyon Bekliyor",
-        btnJsx: (
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={confirmButtonClickHandler}
-              className="bg-green-300 py-3 rounded-lg font-bold text-green-700 transition-all hover:bg-green-400"
-            >
-              Onayla
-            </button>
-            <button
-              onClick={cancelButtonClickHandler}
-              className="bg-red-300 py-3 rounded-lg font-bold text-red-700 transition-all hover:bg-red-400"
-            >
-              Reddet
-            </button>
-          </div>
-        ),
       };
     }
   };
@@ -71,10 +34,8 @@ export default function SoldCard({ salesData, onClickConfirm, onClickCancel, onC
       </div>
       <div className="mb-4">
         <h1 className="text-4xl">
-          <div>
-            <span className="font-bold">{salesData.userBuyer.email}</span>
-            <span> - {salesData.userBuyer.name}</span>
-          </div>
+          <span className="font-bold">{salesData.userSeller.email}</span>
+          <span> - {salesData.userSeller.name}</span>
         </h1>
         <div className={`${status.bg} mt-2 p-1 px-3 inline-flex rounded-md text-lg text-white`}>
           <span>Günlük Tutar: </span>
@@ -114,7 +75,6 @@ export default function SoldCard({ salesData, onClickConfirm, onClickCancel, onC
               </p>
             )}
           </div>
-          {status.btnJsx}
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             func: status ? "success" : "error",
             message: status ? "" : "Bir hata oluştu"
         }
-        return await json[result.func](res, null, result.message)
+        return await json[result.func](res, () => null, result.message)
     } catch (error) {
         return await json.error(res, error.message, "Kiralama işleminde hata oluştu")
     }

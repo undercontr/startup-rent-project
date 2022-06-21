@@ -35,7 +35,7 @@ export async function processRentRequest({ salesId, isApproved }) {
         const client = new PrismaClient();
         const uncompletedSaleRecord = await client.sales.findUnique({ where: { id: Number(salesId) } })
 
-        if (uncompletedSaleRecord.isApproved !== undefined) {
+        if (uncompletedSaleRecord.isApproved !== null) {
             return {success: false, data: null, message: "Bu satış daha önceden işlenmiş"};
         }
 
@@ -50,7 +50,7 @@ export async function processRentRequest({ salesId, isApproved }) {
 
         } else {
             const [sales, userCar] = await client.$transaction([
-                client.sales.delete({ where: { id: Number(salesId) } }),
+                client.sales.update({ where: { id: Number(salesId) }, data: {isApproved: false, isFinished: true} }),
                 client.userCar.update({ where: { id: uncompletedSaleRecord.userCarId}, data: {isOccupied: false}})
             ])
             return {success: true, data: {sales, userCar}, message: "Kiralama isteği reddedildi."}
