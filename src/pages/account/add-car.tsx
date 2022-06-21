@@ -104,7 +104,7 @@ export default function AddCar(props) {
       axios.post("/api/getcars", body).then(json => {
         setCars(json.data.data);
       }).catch((error) => {
-        console.log("error", error)
+        console.error("error", error)
       })
 
   }, [brandId]);

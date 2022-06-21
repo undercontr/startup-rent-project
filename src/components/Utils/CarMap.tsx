@@ -88,10 +88,10 @@ function CarMap({ mapChildren, onClickRent }) {
                   </div>
                   <p className="font-bold text-lg my-1">
                     {Intl.NumberFormat("tr-TR", { currency: "TRY", style: "currency" }).format(userCar.dailyHireRate)}
+                    - ({Intl.NumberFormat("tr-TR", { currency: "TRY", style: "currency" }).format(userCar.dailyHireRate / (60 * 24))})
                   </p>
                   <a
                     onClick={() => {
-                      console.log("onCLickReservation fired")
                       onClickRent(userCar)
                     }}
                     className="bg-blue-500  hover:bg-blue-700 transition-all cursor-pointer rounded-md p-1 block text-center font-bold text-white"

@@ -28,13 +28,7 @@ export async function processRentRequestApiCall(salesId: number, isApproved) {
 }
 
 export async function processCarReturn(salesId: number) {
-    const sendData = {
-        entity: "sales",
-        query: {
-            where: { id: Number(salesId) }, data: { isFinished: true }
-        }
-    }
-    const { data: salesResult } = await axios.post("/api/updateentity", sendData)
+    const { data: salesResult } = await axios.post("/api/carreturn", {salesId})
     return salesResult;
 }
 

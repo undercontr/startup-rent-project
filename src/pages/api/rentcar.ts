@@ -7,8 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const status = await rentCar(req.body)
         const result = {
-            func: status ? "success" : "error",
-            message: status ? "" : "Bir hata oluştu"
+            func: status.success ? "success" : "error",
+            message: status.message ? "" : "Bir hata oluştu"
         }
         return await json[result.func](res, () => null, result.message)
     } catch (error) {

@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { tryCatchNext } from "../helper/decorators/tryCatch";
 
 export async function getUserByEmail(email) {
     try {

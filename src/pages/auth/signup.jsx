@@ -4,7 +4,6 @@ import { getCsrfToken } from "next-auth/react";
 import { useState } from "react";
 
 export default function SignUp({ providers, csrfToken }) {
-  console.log(axios)
   const [apiResult, setApiResult] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
