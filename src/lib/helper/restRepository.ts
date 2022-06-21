@@ -54,7 +54,7 @@ export async function getUserSoldCars(userEmail: string, filter: CarFilterType) 
         break;
         case "rejected": {
             filterObj.isApproved = false;
-            filterObj.isFinished = false;
+            filterObj.isFinished = true;
         }
         break;
         case "requiredAction": {
@@ -104,7 +104,7 @@ export async function getUserBoughtCars(userEmail: string, filter: CarFilterType
         break;
         case "rejected": {
             filterObj.isApproved = false;
-            filterObj.isFinished = false;
+            filterObj.isFinished = true;
         }
         break;
         case "requiredAction": {

@@ -53,7 +53,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const client = new PrismaClient();
 
   const boughtCars = await client.sales.findMany({
-    where: { userBuyer: { email: session?.user.email } },
+    where: { userBuyer: { email: session?.user.email }, isApproved: false, isFinished: false },
     include: {
       userSeller: true,
       userCar: {
